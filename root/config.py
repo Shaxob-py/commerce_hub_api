@@ -11,6 +11,12 @@ class Settings(BaseSettings):
     POSTGRES_USER: str = Field(default='postgres')
     POSTGRES_PASSWORD: str = Field(default='1')
 
+    EMAIL_HOST: str
+    EMAIL_PORT: int = Field(default=465)
+    EMAIL_USER: str
+    EMAIL_PASSWORD: str
+
+    REDIS_URL : str = Field(default='redis://localhost:6379')
     @property
     def postgres_async_url(self):
         return (f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:"
