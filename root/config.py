@@ -11,6 +11,11 @@ class Settings(BaseSettings):
     POSTGRES_USER: str = Field(default='postgres')
     POSTGRES_PASSWORD: str = Field(default='1')
 
+    JWT_SECRET_KEY: str = Field(default='secret')
+    JWT_ALGORITHM: str = Field(default='HS256')
+    JWT_ACCESS_TOKEN_EXPIRE_TIME: int = Field(default=60)
+    JWT_REFRESH_TOKEN_EXPIRE_TIME: int = Field(default=3600)
+
     EMAIL_HOST: str
     EMAIL_PORT: int = Field(default=465)
     EMAIL_USER: str

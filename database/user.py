@@ -16,3 +16,4 @@ class User(Model):
     async def get_by_email(cls , email):
         query = select(cls).where(cls.email == email)
         return (await db.execute(query)).scalar()
+

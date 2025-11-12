@@ -32,11 +32,20 @@ class OtpService:
         self.redis_client.set(_key, user_data, expire_time)
         return True, 0
 
+    def save_user_email(self, email: str, expire_time=120):
+        _key = self._get_registration_key(email)
+        _ttl = self.redis_client.ttl(_key)
+        if _ttl > 0:
+            return False, _ttl
+        self.redis_client.set(_key, expire_time)
+        return True, 0
+
     def verify_email(self, email: str, code: str) -> tuple[bool, dict]:
         saved_code = self.redis_client.get(self._get_otp_email_key(email))
         user_data = self.redis_client.get(self._get_registration_key(email))
         if saved_code:
             saved_code = saved_code.decode()
+
 
         user_data = orjson.loads(user_data)
         return saved_code == code, user_data
