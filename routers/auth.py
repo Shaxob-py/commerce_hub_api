@@ -24,7 +24,7 @@ async def login_view(data: RegisterSchema, service: OtpService = Depends(otp_ser
             status.HTTP_400_BAD_REQUEST
         )
 
-    service.save_user_email(data.email) # noqa
+    service.save_user_before_registration(data.email, data.model_dump()) # noqa
     code = generate_code()
     print(code)
     service.send_otp_by_email(data.email, str(code)) # noqa

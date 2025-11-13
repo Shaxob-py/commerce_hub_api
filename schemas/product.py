@@ -15,15 +15,15 @@ class ProductSchema(BaseModel):
     price : float
     lat : float
     lng : float
-    photo : str
+    photo_url : str
     currency : str
-    user_id : UUID
+    description : str
     category_id : UUID
 
     @field_validator('price')
     def password_validator(cls, value):
-        if len(value) < 12:
-            raise ValueError('Price must be at least 12')
+        if value > 100000000:
+            raise ValueError('Very big price')
         return value
 
     class Config:

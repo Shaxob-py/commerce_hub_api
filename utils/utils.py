@@ -1,8 +1,11 @@
+import os
 import smtplib
+from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from random import randint
 
+import aiofiles
 from jinja2 import Environment, FileSystemLoader
 
 from root.config import settings
@@ -37,3 +40,24 @@ def verification_send_email(to_email, code: str):
 
     body = template.render(context)
     send_email(to_email, subject, body)
+
+async def save_photo(image):
+    today = datetime.now()
+
+    save_dir = os.path.join("media", "product", today.strftime("%Y"), today.strftime("%m"), today.strftime("%d"))
+    os.makedirs(save_dir, exist_ok=True)
+
+    filename = f"tour_{today.strftime('%H%M%S')}.jpg"
+    file_path = os.path.join(save_dir, filename)
+
+    async with aiofiles.open(file_path, "wb") as f:
+        content = await image.read()
+        await f.write(content)
+
+    return os.path.join(
+        "/media/tours",
+        today.strftime("%Y"),
+        today.strftime("%m"),
+        today.strftime("%d"),
+        filename
+    )
