@@ -6,6 +6,7 @@ from email.mime.text import MIMEText
 from random import randint
 
 import aiofiles
+from fastapi import UploadFile
 from jinja2 import Environment, FileSystemLoader
 
 from root.config import settings
@@ -41,23 +42,16 @@ def verification_send_email(to_email, code: str):
     body = template.render(context)
     send_email(to_email, subject, body)
 
-async def save_photo(image):
+async def save_photo(file: UploadFile) -> str:
     today = datetime.now()
+    folder = f"media/products/{today:%Y/%m/%d}"
+    os.makedirs(folder, exist_ok=True)
 
-    save_dir = os.path.join("media", "product", today.strftime("%Y"), today.strftime("%m"), today.strftime("%d"))
-    os.makedirs(save_dir, exist_ok=True)
+    filename = f"{today:%H%M%S}_{file.filename}"
+    filepath = os.path.join(folder, filename)
 
-    filename = f"tour_{today.strftime('%H%M%S')}.jpg"
-    file_path = os.path.join(save_dir, filename)
+    async with aiofiles.open(filepath, "wb") as f:
+        await f.write(await file.read())
 
-    async with aiofiles.open(file_path, "wb") as f:
-        content = await image.read()
-        await f.write(content)
-
-    return os.path.join(
-        "/media/tours",
-        today.strftime("%Y"),
-        today.strftime("%m"),
-        today.strftime("%d"),
-        filename
-    )
+    # URL sifatida qaytaramiz (static files orqali serve qilinadi)
+    return f"/media/products/{today:%Y/%m/%d}/{filename}"
