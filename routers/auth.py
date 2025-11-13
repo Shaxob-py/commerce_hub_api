@@ -3,7 +3,7 @@ from fastapi.responses import ORJSONResponse
 from starlette import status
 
 from database import User
-from schemas.user import RegisterForm, ResponseSchema, LoginForm, VerifyForm
+from schemas.user import RegisterSchema, ResponseSchema, LoginSchema, VerifySchema
 from services.otp_services import OtpService
 from utils.jwt_token import create_access_token, create_refresh_token
 from utils.utils import generate_code
@@ -16,7 +16,7 @@ def otp_service():
 
 
 @auth_router.post('/register', status_code=status.HTTP_201_CREATED, response_model=ResponseSchema)
-async def login_view(data: RegisterForm, service: OtpService = Depends(otp_service)):
+async def login_view(data: RegisterSchema, service: OtpService = Depends(otp_service)):
     user = await User.get_by_email(data.email)
     if user is not None:
         return ORJSONResponse(
@@ -34,8 +34,8 @@ async def login_view(data: RegisterForm, service: OtpService = Depends(otp_servi
         data=None)
 
 
-@auth_router.post('/login', status_code=status.HTTP_200_OK, response_model=ResponseSchema[RegisterForm])
-async def login_view(data: LoginForm, service: OtpService = Depends(otp_service)):
+@auth_router.post('/login', status_code=status.HTTP_200_OK, response_model=ResponseSchema)
+async def login_view(data: LoginSchema, service: OtpService = Depends(otp_service)):
     user = await User.get_by_email(data.email)
     if user is None:
         return ORJSONResponse({'message': 'Not registered found'},
@@ -50,7 +50,7 @@ async def login_view(data: LoginForm, service: OtpService = Depends(otp_service)
 
 
 @auth_router.post('/verification-email', status_code=status.HTTP_200_OK)
-async def login_view(data: VerifyForm, service: OtpService = Depends(otp_service)):
+async def login_view(data: VerifySchema, service: OtpService = Depends(otp_service)):
     is_verified, user_data = service.verify_email(data.email, data.code) # noqa
 
     if is_verified:

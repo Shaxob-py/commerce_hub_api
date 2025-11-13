@@ -10,16 +10,16 @@ class ResponseSchema(BaseModel, Generic[T]):
     data: T | None = None
 
 
-class RegisterForm(BaseModel):
+class RegisterSchema(BaseModel):
     email: EmailStr = Field(..., examples=['xunuddinovshaxob@gmail.com'])
     username: str
 
 
-class LoginForm(BaseModel):
+class LoginSchema(BaseModel):
     email: EmailStr = Field(..., examples=['xunuddinovshaxob@gmail.com'])
 
 
 
-class VerifyForm(BaseModel):
+class VerifySchema(BaseModel):
     email: EmailStr = Field(..., examples=['xunuddinovshaxob@gmail.com'])
     code: str

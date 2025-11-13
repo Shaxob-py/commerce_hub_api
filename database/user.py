@@ -2,15 +2,15 @@
 from sqlalchemy import String , select
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from database import Model
-from database.base import db
+from database.base import db, CreatedModel
 
 
-class User(Model):
+class User(CreatedModel):
     email: Mapped[str] = mapped_column(String , unique=True)
     username: Mapped[str] = mapped_column(String)
     password: Mapped[str] = mapped_column(String, nullable=True)
     products = relationship("Product", back_populates="user")
+
 
     @classmethod
     async def get_by_email(cls , email):
