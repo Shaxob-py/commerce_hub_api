@@ -11,14 +11,14 @@ from utils.jwt_token import get_current_user
 user_router = APIRouter(tags=["User"])
 
 
-@user_router.get('/users/{id}', status_code=status.HTTP_200_OK, response_model=ResponseSchema[UserSchema])
-async def get_user_by_id_view(id_: UUID):
-    user = await User.get(id_)
+@user_router.get('/users/{user_id}', status_code=status.HTTP_200_OK, response_model=ResponseSchema[UserSchema])
+async def get_user_by_id_view(user_id: UUID):
+    user = await User.get(user_id)
     if not user:
         ORJSONResponse(status_code=status.HTTP_404_NOT_FOUND,
                        content={"message": "user not found"})
     return ResponseSchema[UserSchema](
-        message=f'User {id_}',
+        message=f'User {user_id}',
         data=user
     )
 

@@ -45,14 +45,14 @@ async def create_product_view(
     )
 
 
-@product_router.get("/products/{id_}", response_model=ResponseSchema[ReadProductSchema],
+@product_router.get("/products/{product_id}", response_model=ResponseSchema[ReadProductSchema],
                     status_code=status.HTTP_200_OK)
-async def get_product_view(id_: UUID):
-    product = await Product.get(id_)
+async def get_product_view(product_id: UUID):
+    product = await Product.get(product_id)
 
     if product:
         return ResponseSchema[ReadProductSchema](
-            message=f"Product {id_} was found",
+            message=f"Product {product_id} was found",
             data=product,
         )
     return ORJSONResponse(
@@ -60,16 +60,16 @@ async def get_product_view(id_: UUID):
         status_code=status.HTTP_404_NOT_FOUND)
 
 
-@product_router.delete("/products/{id_}",
+@product_router.delete("/products/{product_id}",
                        status_code=status.HTTP_204_NO_CONTENT)
-async def get_product_view(id_: UUID, current_user=Depends(get_current_user)):
-    product = await Product.get(id_)
+async def get_product_view(product_id: UUID, current_user=Depends(get_current_user)):
+    product = await Product.get(product_id)
     if product.user_id != current_user.id:
         return ORJSONResponse({
             "message": "You are not the owner of this product",
         }, status_code=status.HTTP_403_FORBIDDEN)
     if product:
-        await Product.delete(id_)
+        await Product.delete(product_id)
         return None
     return ORJSONResponse(
         {"message": "Product not found"},
