@@ -1,6 +1,9 @@
 from typing import Generic, TypeVar
+from uuid import UUID
 
 from pydantic import BaseModel, EmailStr, Field
+
+from schemas.product import ProductSchema
 
 T = TypeVar('T', bound=BaseModel)
 
@@ -23,3 +26,10 @@ class LoginSchema(BaseModel):
 class VerifySchema(BaseModel):
     email: EmailStr = Field(..., examples=['xunuddinovshaxob@gmail.com'])
     code: str
+
+class UserSchema(BaseModel):
+    id : UUID
+    username: str
+    email: EmailStr
+    products: list[ProductSchema]
+
