@@ -1,20 +1,40 @@
 from fastapi import APIRouter
+from fastapi.responses import ORJSONResponse
+from starlette import status
 
-from database import Product
-from schemas.product import ProductSchema
+from database import Product, Category
+from schemas.product import ReadProductSchema, ReadCategorySchema
 from schemas.user import ResponseSchema
-from utils.jwt_token import get_current_user
-from utils.utils import save_photo
 
 category_router = APIRouter(tags=["Category"])
 
 
-
-@category_router.get("/categories/{category_id}/products")
-async def get_products_by_category(
-    category_id: str,
-    limit: int = 10,
-    offset: int = 0
+@category_router.get("/categories/{category_id}/products", response_model=ResponseSchema[list[ReadProductSchema]],
+                     status_code=status.HTTP_200_OK)
+async def get_products_by_category_view(
+        category_id: str,
+        limit: int = 10,
+        offset: int = 0
 ):
-    products = await Product.filter(Product.category_id == category_id)
-    return products
+    products = await Product.get_products_by_category(
+        category_id=category_id,
+        limit=limit,
+        offset=offset
+    )
+    if products:
+        return ResponseSchema[list[ReadProductSchema]](
+            message='Category products',
+            data=products,
+        )
+    return ORJSONResponse({'message': 'Product not found'},
+                          status.HTTP_404_NOT_FOUND)
+
+
+@category_router.get("/categories", response_model=ResponseSchema[list[ReadCategorySchema]],
+                     status_code=status.HTTP_200_OK)
+async def get_categories_view():
+    categories = await Category.get_all()
+    return ResponseSchema[list[ReadCategorySchema]](
+        message='Categories',
+        data=categories,
+    )

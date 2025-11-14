@@ -47,11 +47,12 @@ async def save_photo(file: UploadFile) -> str:
     folder = f"media/products/{today:%Y/%m/%d}"
     os.makedirs(folder, exist_ok=True)
 
-    filename = f"{today:%H%M%S}_{file.filename}"
+    ext = file.filename.split('.')[-1]
+    filename = f"{today:%H%M%S}.png" if ext.lower() == "png" else f"{today:%H%M%S}.{ext}"
+
     filepath = os.path.join(folder, filename)
 
     async with aiofiles.open(filepath, "wb") as f:
         await f.write(await file.read())
 
-    # URL sifatida qaytaramiz (static files orqali serve qilinadi)
     return f"/media/products/{today:%Y/%m/%d}/{filename}"

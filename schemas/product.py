@@ -30,3 +30,27 @@ class ProductSchema(BaseModel):
         from_attributes = True
 
 
+
+
+class ReadProductSchema(BaseModel):
+    id : UUID
+    name : str
+    price : float
+    lat : float
+    user_id : UUID
+    lng : float
+    photo_url : str
+    currency : str
+    description : str
+    category_id : UUID
+
+    class Config:
+        from_attributes = True
+
+
+class ReadCategorySchema(BaseModel):
+    id : UUID
+    name : str
+
+    class Config:
+        from_attributes = True

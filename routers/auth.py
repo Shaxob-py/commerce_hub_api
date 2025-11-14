@@ -16,7 +16,7 @@ def otp_service():
 
 
 @auth_router.post('/register', status_code=status.HTTP_201_CREATED, response_model=ResponseSchema)
-async def login_view(data: RegisterSchema, service: OtpService = Depends(otp_service)):
+async def register_view(data: RegisterSchema, service: OtpService = Depends(otp_service)):
     user = await User.get_by_email(data.email)
     if user is not None:
         return ORJSONResponse(
@@ -50,7 +50,7 @@ async def login_view(data: LoginSchema, service: OtpService = Depends(otp_servic
 
 
 @auth_router.post('/verification-email', status_code=status.HTTP_200_OK)
-async def login_view(data: VerifySchema, service: OtpService = Depends(otp_service)):
+async def verifi_view(data: VerifySchema, service: OtpService = Depends(otp_service)):
     is_verified, user_data = service.verify_email(data.email, data.code) # noqa
 
     if is_verified:

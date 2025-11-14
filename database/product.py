@@ -1,10 +1,10 @@
 from enum import Enum
 
-from sqlalchemy import Float, ForeignKey, Numeric, Enum as SQLEnum, BigInteger
+from sqlalchemy import Float, ForeignKey, Numeric, Enum as SQLEnum, BigInteger, select
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from database.base import CreatedModel
+from database.base import CreatedModel, db
 
 
 class Product(CreatedModel):
@@ -35,3 +35,16 @@ class Product(CreatedModel):
     )
 
     category: Mapped["Category"] = relationship("Category", back_populates="products")
+
+    @classmethod
+    async def get_products_by_category(cls,category_id,limit: int = 10, offset: int = 0):
+        query = (
+            select(Product)
+            .where(Product.category_id == category_id)
+            .offset(offset)
+            .limit(limit)
+        )
+        result = await db.execute(query)
+        products = result.scalars().all()
+
+        return products
