@@ -1,6 +1,6 @@
 from enum import Enum
 
-from sqlalchemy import Float, ForeignKey, Numeric, Enum as SQLEnum, BigInteger, select
+from sqlalchemy import ForeignKey, Numeric, Enum as SQLEnum, BigInteger, select, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -17,8 +17,7 @@ class Product(CreatedModel):
     price: Mapped[float] = mapped_column(Numeric(12, 0))
     description: Mapped[str]
     photo_url: Mapped[str]
-    lat: Mapped[float] = mapped_column(Float)
-    lng: Mapped[float] = mapped_column(Float)
+    location: Mapped[str] = mapped_column(String)
     currency: Mapped[Valute] = mapped_column(SQLEnum(Valute))
     views: Mapped[int] = mapped_column(BigInteger)
 
@@ -37,7 +36,7 @@ class Product(CreatedModel):
     category: Mapped["Category"] = relationship("Category", back_populates="products")
 
     @classmethod
-    async def get_products_by_category(cls,category_id,limit: int = 10, offset: int = 0):
+    async def get_products_by_category(cls, category_id, limit: int = 10, offset: int = 0):
         query = (
             select(Product)
             .where(Product.category_id == category_id)

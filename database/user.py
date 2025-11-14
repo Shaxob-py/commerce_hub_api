@@ -11,6 +11,8 @@ class User(CreatedModel):
     username: Mapped[str] = mapped_column(String)
     password: Mapped[str] = mapped_column(String, nullable=True)
     products = relationship("Product", back_populates="user")
+    support_messages = relationship("SupportMessage", back_populates="user")
+
 
     @classmethod
     async def get_by_email(cls, email: str):

@@ -33,3 +33,5 @@ class UserSchema(BaseModel):
     email: EmailStr
     products: list[ProductSchema]
 
+class UserUpdateSchema(BaseModel):
+    username: str
