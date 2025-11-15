@@ -42,6 +42,7 @@ def verification_send_email(to_email, code: str):
     body = template.render(context)
     send_email(to_email, subject, body)
 
+
 async def save_photo(file: UploadFile) -> str:
     today = datetime.now()
     folder = f"media/products/{today:%Y/%m/%d}"
@@ -56,3 +57,4 @@ async def save_photo(file: UploadFile) -> str:
         await f.write(await file.read())
 
     return f"/media/products/{today:%Y/%m/%d}/{filename}"
+

@@ -27,7 +27,7 @@ async def get_products_by_category_view(
             data=products,
         )
     raise HTTPException(
-        status_code=404,
+        status_code=status.HTTP_404_NOT_FOUND,
         detail="Product not found"
     )
 

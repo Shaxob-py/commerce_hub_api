@@ -2,7 +2,6 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi import status
-from fastapi.responses import ORJSONResponse
 
 from database import User
 from schemas.user import ResponseSchema, UserSchema, UserUpdateSchema

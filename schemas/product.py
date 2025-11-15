@@ -1,6 +1,8 @@
+from typing import Optional
 from uuid import UUID
 
 from pydantic import BaseModel, field_validator
+
 
 class CategorySchema(BaseModel):
     icon: str
@@ -11,14 +13,13 @@ class CategorySchema(BaseModel):
 
 
 class ProductSchema(BaseModel):
-    name : str
-    price : float
-    lat : float
-    lng : float
-    photo_url : str
-    currency : str
-    description : str
-    category_id : UUID
+    name: str
+    price: float
+    location: str
+    photo_url: str
+    currency: str
+    description: str
+    category_id: UUID
 
     @field_validator('price')
     def password_validator(cls, value):
@@ -30,42 +31,54 @@ class ProductSchema(BaseModel):
         from_attributes = True
 
 
-
-
 class ReadProductSchema(BaseModel):
-    id : UUID
-    name : str
-    price : float
-    lat : float
-    user_id : UUID
-    lng : float
-    photo_url : str
-    currency : str
-    description : str
-    category_id : UUID
+    id: UUID
+    name: str
+    price: float
+    lat: float
+    user_id: UUID
+    lng: float
+    photo_url: str
+    currency: str
+    description: str
+    category_id: UUID
 
     class Config:
         from_attributes = True
 
 
 class ReadCategorySchema(BaseModel):
-    id : UUID
-    name : str
+    id: UUID
+    name: str
 
     class Config:
         from_attributes = True
 
 
 class CommentPostSchema(BaseModel):
-    text : str
-    product_id : UUID
-    user_id : UUID
+    message: str
+    product_id: UUID
 
-    @field_validator('text')
+    @field_validator('message')
     def password_validator(cls, value):
-        if len(value) > 200 :
+        if len(value) > 200:
             raise ValueError('len too long')
         return value
 
     class Config:
         from_attributes = True
+
+
+class ReadCommentSchema(BaseModel):
+    id: UUID
+    message: str
+
+    class Config:
+        from_attributes = True
+
+class ProductFilter(BaseModel):
+    name: Optional[str] = None
+    price_min: Optional[float] = None
+    price_max: Optional[float] = None
+    limit: int = 20
+    offset: int = 0

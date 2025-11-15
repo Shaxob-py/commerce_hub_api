@@ -5,6 +5,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database.base import CreatedModel, db
+from schemas.product import ProductFilter
 
 
 class Product(CreatedModel):
@@ -21,7 +22,6 @@ class Product(CreatedModel):
     currency: Mapped[Valute] = mapped_column(SQLEnum(Valute))
     views: Mapped[int] = mapped_column(BigInteger)
     comments = relationship("Comment", back_populates="product")
-
 
     user_id: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -49,3 +49,30 @@ class Product(CreatedModel):
         products = result.scalars().all()
 
         return products
+
+    # @classmethod
+    # async def search_products(cls, product_name: str, limit: int = 10, offset: int = 0):
+    #     query = (
+    #         select(cls)
+    #         .where(cls.name.ilike(f"%{product_name}%"))
+    #         .limit(limit)
+    #         .offset(offset)
+    #     )
+    #     result = await db.execute(query)
+    #     return result.scalars().all()
+
+    @classmethod
+    def build_product_query(cls, filters: ProductFilter):
+        query = select(cls)
+
+        if filters.name:
+            query = query.where(cls.name.ilike(f"%{filters.search}%"))
+
+        if filters.price_min is not None:
+            query = query.where(cls.price >= filters.price_min)
+
+        if filters.price_max is not None:
+            query = query.where(cls.price <= filters.price_max)
+
+        db.execute(query)
+        return query

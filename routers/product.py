@@ -2,10 +2,9 @@ from uuid import UUID
 
 from fastapi import APIRouter, HTTPException
 from fastapi import UploadFile, File, Form, Depends, status
-from fastapi.responses import ORJSONResponse
 
-from database import Product
-from schemas.product import ReadProductSchema
+from database import Product, Comment, User
+from schemas.product import ReadProductSchema, ReadCommentSchema, CommentPostSchema, ProductFilter
 from schemas.user import ResponseSchema
 from utils.jwt_token import get_current_user
 from utils.utils import save_photo
@@ -17,8 +16,7 @@ product_router = APIRouter(tags=["Product"])
 async def create_product_view(
         name: str = Form(...),
         price: float = Form(...),
-        lat: float = Form(...),
-        lng: float = Form(...),
+        location: str = Form(...),
         currency: str = Form(...),
         description: str = Form(...),
         category_id: UUID = Form(...),
@@ -26,12 +24,17 @@ async def create_product_view(
         current_user=Depends(get_current_user)):
     photo_url = await save_photo(photo)
 
+    if price < 0 or price > 10000000:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='Invalid price',
+        )
+
     await Product.create(
         name=name,
         price=price,
         description=description,
-        lat=lat,
-        lng=lng,
+        location=location,
         photo_url=photo_url,
         category_id=category_id,
         user_id=current_user.id,
@@ -67,7 +70,7 @@ async def get_product_view(product_id: UUID, current_user=Depends(get_current_us
     product = await Product.get(product_id)
     if product.user_id != current_user.id:
         raise HTTPException(
-            status_code=403,
+            status_code=status.HTTP_403_FORBIDDEN,
             detail="Forbidden",
         )
 
@@ -75,6 +78,14 @@ async def get_product_view(product_id: UUID, current_user=Depends(get_current_us
         await Product.delete(product_id)
         return None
     raise HTTPException(
-        status_code=404,
+        status_code=status.HTTP_404_NOT_FOUND,
         detail="Product not found"
+    )
+
+@product_router.get("/products/")
+async def get_products(data: ProductFilter = Depends()):
+    products = Product.build_product_query(data)
+    return ResponseSchema(
+        message='Success',
+        data=products,
     )
