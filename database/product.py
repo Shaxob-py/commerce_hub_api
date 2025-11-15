@@ -20,6 +20,8 @@ class Product(CreatedModel):
     location: Mapped[str] = mapped_column(String)
     currency: Mapped[Valute] = mapped_column(SQLEnum(Valute))
     views: Mapped[int] = mapped_column(BigInteger)
+    comments = relationship("Comment", back_populates="product")
+
 
     user_id: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True),

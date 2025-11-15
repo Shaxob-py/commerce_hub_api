@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi import status
 from fastapi.responses import ORJSONResponse
 
@@ -15,8 +15,10 @@ user_router = APIRouter(tags=["User"])
 async def get_user_by_id_view(user_id: UUID):
     user = await User.get(user_id)
     if not user:
-        ORJSONResponse(status_code=status.HTTP_404_NOT_FOUND,
-                       content={"message": "user not found"})
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
     return ResponseSchema[UserSchema](
         message=f'User {user_id}',
         data=user

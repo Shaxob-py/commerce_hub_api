@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import ORJSONResponse
 from starlette import status
 
@@ -26,8 +26,10 @@ async def get_products_by_category_view(
             message='Category products',
             data=products,
         )
-    return ORJSONResponse({'message': 'Product not found'},
-                          status.HTTP_404_NOT_FOUND)
+    raise HTTPException(
+        status_code=404,
+        detail="Product not found"
+    )
 
 
 @category_router.get("/categories", response_model=ResponseSchema[list[ReadCategorySchema]],

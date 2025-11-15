@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi import UploadFile, File, Form, Depends, status
 from fastapi.responses import ORJSONResponse
 
@@ -55,9 +55,10 @@ async def get_product_view(product_id: UUID):
             message=f"Product {product_id} was found",
             data=product,
         )
-    return ORJSONResponse(
-        {"message": "Product not found"},
-        status_code=status.HTTP_404_NOT_FOUND)
+    raise HTTPException(
+        status_code=404,
+        detail="Product not found"
+    )
 
 
 @product_router.delete("/products/{product_id}",
@@ -65,13 +66,15 @@ async def get_product_view(product_id: UUID):
 async def get_product_view(product_id: UUID, current_user=Depends(get_current_user)):
     product = await Product.get(product_id)
     if product.user_id != current_user.id:
-        return ORJSONResponse({
-            "message": "You are not the owner of this product",
-        }, status_code=status.HTTP_403_FORBIDDEN)
+        raise HTTPException(
+            status_code=403,
+            detail="Forbidden",
+        )
+
     if product:
         await Product.delete(product_id)
         return None
-    return ORJSONResponse(
-        {"message": "Product not found"},
-        status_code=status.HTTP_404_NOT_FOUND
+    raise HTTPException(
+        status_code=404,
+        detail="Product not found"
     )

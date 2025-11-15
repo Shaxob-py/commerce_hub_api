@@ -12,6 +12,7 @@ class User(CreatedModel):
     password: Mapped[str] = mapped_column(String, nullable=True)
     products = relationship("Product", back_populates="user")
     support_messages = relationship("SupportMessage", back_populates="user")
+    comments = relationship("Comment", back_populates="user")
 
 
     @classmethod

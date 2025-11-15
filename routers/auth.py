@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Body
+from fastapi import APIRouter, Depends, Body, HTTPException
 from fastapi.responses import ORJSONResponse
 from starlette import status
 
@@ -19,9 +19,9 @@ def otp_service():
 async def register_view(data: RegisterSchema, service: OtpService = Depends(otp_service)):
     user = await User.get_by_email(data.email)
     if user is not None:
-        return ORJSONResponse(
-            {'message': 'Email already registered'},
-            status.HTTP_400_BAD_REQUEST
+        raise HTTPException(
+            status_code=400,
+            detail="Bad request",
         )
 
     service.save_user_before_registration(data.email, data.model_dump()) # noqa
@@ -38,8 +38,11 @@ async def register_view(data: RegisterSchema, service: OtpService = Depends(otp_
 async def login_view(data: LoginSchema, service: OtpService = Depends(otp_service)):
     user = await User.get_by_email(data.email)
     if user is None:
-        return ORJSONResponse({'message': 'Not registered found'},
-                              status.HTTP_401_UNAUTHORIZED)
+        raise HTTPException(
+            status_code=401,
+            detail="Not Authorized",
+        )
+
     code = generate_code()
     print(code)
     service.save_user_before_registration(data.email, data.model_dump()) # noqa
@@ -66,7 +69,8 @@ async def verifi_view(data: VerifySchema, service: OtpService = Depends(otp_serv
             "refresh_token": refresh_token,
         }
 
-    return ORJSONResponse(
-        {"message": "Invalid or expired code"},
-        status.HTTP_400_BAD_REQUEST
-    )
+    raise HTTPException(
+            status_code=400,
+            detail="Invalid or expired code"
+        )
+

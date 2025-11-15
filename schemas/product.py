@@ -54,3 +54,18 @@ class ReadCategorySchema(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class CommentPostSchema(BaseModel):
+    text : str
+    product_id : UUID
+    user_id : UUID
+
+    @field_validator('text')
+    def password_validator(cls, value):
+        if len(value) > 200 :
+            raise ValueError('len too long')
+        return value
+
+    class Config:
+        from_attributes = True
