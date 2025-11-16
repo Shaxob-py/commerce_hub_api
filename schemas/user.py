@@ -35,3 +35,6 @@ class UserSchema(BaseModel):
 
 class UserUpdateSchema(BaseModel):
     username: str
+
+class UserSupportSchema(BaseModel):
+    message: str

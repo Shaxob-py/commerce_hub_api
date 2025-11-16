@@ -2,6 +2,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, HTTPException
 from fastapi import UploadFile, File, Form, Depends, status
+from fastapi.responses import ORJSONResponse
 
 from database import Product, Comment, User
 from schemas.product import ReadProductSchema, ReadCommentSchema, CommentPostSchema, ProductFilter
@@ -83,9 +84,12 @@ async def get_product_view(product_id: UUID, current_user=Depends(get_current_us
     )
 
 @product_router.get("/products/")
-async def get_products(data: ProductFilter = Depends()):
-    products = Product.build_product_query(data)
-    return ResponseSchema(
-        message='Success',
-        data=products,
-    )
+async def get_products_view(product_name):
+    if product_name:
+        product = await Product.search_products(product_name)
+    if product:
+        return ResponseSchema[ReadProductSchema](
+            message=f"Product {product_name} was found",
+            data=product,
+        )
+

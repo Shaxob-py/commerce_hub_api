@@ -35,9 +35,8 @@ class ReadProductSchema(BaseModel):
     id: UUID
     name: str
     price: float
-    lat: float
+    location: float
     user_id: UUID
-    lng: float
     photo_url: str
     currency: str
     description: str
@@ -82,3 +81,6 @@ class ProductFilter(BaseModel):
     price_max: Optional[float] = None
     limit: int = 20
     offset: int = 0
+
+    class Config:
+        from_attributes = True

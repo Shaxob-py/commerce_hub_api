@@ -50,29 +50,13 @@ class Product(CreatedModel):
 
         return products
 
-    # @classmethod
-    # async def search_products(cls, product_name: str, limit: int = 10, offset: int = 0):
-    #     query = (
-    #         select(cls)
-    #         .where(cls.name.ilike(f"%{product_name}%"))
-    #         .limit(limit)
-    #         .offset(offset)
-    #     )
-    #     result = await db.execute(query)
-    #     return result.scalars().all()
-
     @classmethod
-    def build_product_query(cls, filters: ProductFilter):
-        query = select(cls)
-
-        if filters.name:
-            query = query.where(cls.name.ilike(f"%{filters.search}%"))
-
-        if filters.price_min is not None:
-            query = query.where(cls.price >= filters.price_min)
-
-        if filters.price_max is not None:
-            query = query.where(cls.price <= filters.price_max)
-
-        db.execute(query)
-        return query
+    async def search_products(cls, product_name: str, limit: int = 10, offset: int = 0):
+        query = (
+            select(cls)
+            .where(cls.name.ilike(f"%{product_name}%"))
+            .limit(limit)
+            .offset(offset)
+        )
+        result = await db.execute(query)
+        return result.scalars().all()

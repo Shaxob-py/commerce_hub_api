@@ -12,8 +12,6 @@ from utils.jwt_token import get_current_user
 comment_router = APIRouter(tags=["Comment"])
 
 
-
-
 @comment_router.delete("/comments/{comments_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_comment_view(comments_id: UUID, current_user: User = Depends(get_current_user)):
     comment = await Comment.get(comments_id)

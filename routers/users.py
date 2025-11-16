@@ -3,8 +3,8 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi import status
 
-from database import User
-from schemas.user import ResponseSchema, UserSchema, UserUpdateSchema
+from database import User, SupportMessage
+from schemas.user import ResponseSchema, UserSchema, UserUpdateSchema, UserSupportSchema
 from utils.jwt_token import get_current_user
 
 user_router = APIRouter(tags=["User"])
@@ -38,4 +38,16 @@ async def user_get_me_view(current_user=Depends(get_current_user)):
     user = await User.get(current_user.id)
     return ResponseSchema(
         data=user
+    )
+
+
+@user_router.post('/users/support-message', status_code=status.HTTP_201_CREATED,response_model=ResponseSchema)
+async def user_support_message_view(data: UserSupportSchema, current_user=Depends(get_current_user)):
+    await SupportMessage.create(
+        message=data.message,
+        user_id=current_user.id,
+    )
+    return ResponseSchema(
+        message=f'Support message created',
+        data=None
     )
