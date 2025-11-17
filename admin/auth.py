@@ -4,7 +4,6 @@ from starlette_admin.auth import AdminConfig, AdminUser, AuthProvider
 from starlette_admin.exceptions import LoginFailed
 
 from database import User
-from utils.utils import normalize_phone
 
 
 class UsernameAndPasswordProvider(AuthProvider):
@@ -16,7 +15,7 @@ class UsernameAndPasswordProvider(AuthProvider):
             request: Request,
             response: Response,
     ) -> Response:
-        phone_number = normalize_phone(username)
+        phone_number = username
         user = await User.get_by_phone_number(phone_number)
 
         if not user:

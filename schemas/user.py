@@ -31,7 +31,6 @@ class UserSchema(BaseModel):
     id : UUID
     username: str
     email: EmailStr
-    products: list[ProductSchema]
 
 class UserUpdateSchema(BaseModel):
     username: str
