@@ -145,6 +145,7 @@ dependencies = [
     { name = "python-multipart" },
     { name = "redis" },
     { name = "sqlalchemy" },
+    { name = "starlette-admin" },
     { name = "uvicorn" },
 ]
 
@@ -163,6 +164,7 @@ requires-dist = [
     { name = "python-multipart", specifier = ">=0.0.20" },
     { name = "redis", specifier = ">=7.0.1" },
     { name = "sqlalchemy", specifier = ">=2.0.44" },
+    { name = "starlette-admin", specifier = ">=0.15.1" },
     { name = "uvicorn", specifier = ">=0.37.0" },
 ]
 
@@ -562,6 +564,20 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/a7/a5/d6f429d43394057b67a6b5bbe6eae2f77a6bf7459d961fdb224bf206eee6/starlette-0.48.0.tar.gz", hash = "sha256:7e8cee469a8ab2352911528110ce9088fdc6a37d9876926e73da7ce4aa4c7a46", size = 2652949, upload-time = "2025-09-13T08:41:05.699Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/be/72/2db2f49247d0a18b4f1bb9a5a39a0162869acf235f3a96418363947b3d46/starlette-0.48.0-py3-none-any.whl", hash = "sha256:0764ca97b097582558ecb498132ed0c7d942f233f365b86ba37770e026510659", size = 73736, upload-time = "2025-09-13T08:41:03.869Z" },
+]
+
+[[package]]
+name = "starlette-admin"
+version = "0.15.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "jinja2" },
+    { name = "python-multipart" },
+    { name = "starlette" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/51/84/bb719df244cb8b720a81bd88aff18ababceb1f3e9afaf44563ba61b2d1b4/starlette_admin-0.15.1.tar.gz", hash = "sha256:beccdb8695ecadc9f314e0b5afd2b04e067538e8273d0c3199b671198b5ee43e", size = 2098915, upload-time = "2025-05-26T15:37:56.278Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/80/41/8f0e354441aae2fc843e7fafb7e64fbfef541f3ac2d238c7b05b1136ffd0/starlette_admin-0.15.1-py3-none-any.whl", hash = "sha256:a832e8a0e8a16c9c3f2012ddf352867ad8e730f21192caa85225798091cba130", size = 2169980, upload-time = "2025-05-26T15:37:53.251Z" },
 ]
 
 [[package]]

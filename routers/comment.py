@@ -17,7 +17,8 @@ async def delete_comment_view(comments_id: UUID, current_user: User = Depends(ge
     comment = await Comment.get(comments_id)
     if comment.user_id != current_user.id:
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
+            status_code=status.HTTP_403_FORBIDDEN
+            ,
             detail="Forbidden",
         )
 
