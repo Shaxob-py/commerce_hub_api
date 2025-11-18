@@ -59,16 +59,15 @@ class Product(CreatedModel):
                 .limit(limit)
                 .offset(offset)
             )
-            result = await db.execute(query)
-            return result.scalars().all()
-        query = (
-            select(cls)
-            .limit(limit)
-            .offset(offset)
-        )
+        else:
+            query = (
+                select(cls)
+                .limit(limit)
+                .offset(offset)
+            )
+
         result = await db.execute(query)
         return result.scalars().all()
-
 
     @classmethod
     async def get_products_by_user_id(cls, user_id, limit: int = 10, offset: int = 0):

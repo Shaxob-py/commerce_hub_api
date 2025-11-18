@@ -38,7 +38,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 app = FastAPI(
     docs_url='/',
-    title="Tour Agency API",
+    title="Commerce Hub Api",
     description="JWT Authentication bilan himoyalangan API",
     lifespan=lifespan,
 )

@@ -28,7 +28,7 @@ async def delete_comment_view(comments_id: UUID, current_user: User = Depends(ge
 
 @comment_router.get("/products/{product_id}/comments", status_code=status.HTTP_200_OK,
                     response_model=ResponseSchema[list[ReadCommentSchema]])
-async def delete_comment_view(product_id: UUID):
+async def get_comment_view(product_id: UUID):
     comment = await Comment.filter(Comment.product_id == product_id)
     if not comment:
         raise HTTPException(

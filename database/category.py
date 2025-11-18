@@ -5,6 +5,5 @@ from database import Model
 
 
 class Category(Model):
-    icon: Mapped[str] = mapped_column(String)
     name: Mapped[str] = mapped_column(String)
     products = relationship("Product", back_populates="category")

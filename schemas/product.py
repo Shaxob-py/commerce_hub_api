@@ -35,7 +35,7 @@ class ReadProductSchema(BaseModel):
     id: UUID
     name: str
     price: float
-    location: float
+    location: str
     user_id: UUID
     photo_url: str
     currency: str

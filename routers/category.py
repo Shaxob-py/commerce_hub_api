@@ -1,10 +1,12 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import ORJSONResponse
 from starlette import status
+from uuid import UUID
 
-from database import Product, Category
+from database import Product, Category, User
 from schemas.product import ReadProductSchema, ReadCategorySchema
 from schemas.user import ResponseSchema
+from utils.jwt_token import get_current_user
 
 category_router = APIRouter(tags=["Category"])
 
@@ -41,7 +43,32 @@ async def get_categories_view():
         data=categories,
     )
 
-@category_router.post("/categories", response_model=ResponseSchema[list[ReadCategorySchema]],
-                     status_code=status.HTTP_201_CREATED)
-async def get_categories_view():
 
+@category_router.post("/categories", response_model=ResponseSchema[list[ReadCategorySchema]],
+                      status_code=status.HTTP_201_CREATED)
+async def create_categories_view(data: ReadCategorySchema, current_user=Depends(get_current_user)):
+    if current_user.role == await User.role.ADMIN:
+        await Category.create(name=data.name)
+        return ResponseSchema(
+            message='Category created',
+            data=None,
+        )
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="User does not have permission to create category"
+    )
+
+
+@category_router.delete("/categories/{category_id}",
+                        status_code=status.HTTP_204_NO_CONTENT)
+async def delete_categories_view(category_id: UUID, current_user=Depends(get_current_user)):
+    if current_user.role == await User.role.ADMIN:
+        await Category.delete(category_id)
+        return ResponseSchema(
+            message='Category deleted',
+            data=None,
+        )
+    raise HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="User does not have permission to delete category"
+    )
