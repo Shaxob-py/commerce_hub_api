@@ -5,7 +5,7 @@ from fastapi import UploadFile, File, Form, Depends, status
 from fastapi.responses import ORJSONResponse
 
 from database import Product, Comment, User
-from schemas.product import ReadProductSchema, ReadCommentSchema, CommentPostSchema, ProductFilter
+from schemas.product import ReadProductSchema, ReadCommentSchema, CommentPostSchema, ProductFilter, ProductSchema
 from schemas.user import ResponseSchema
 from utils.jwt_token import get_current_user
 from utils.utils import save_photo
@@ -83,13 +83,16 @@ async def get_product_view(product_id: UUID, current_user=Depends(get_current_us
         detail="Product not found"
     )
 
-@product_router.get("/products/")
-async def get_products_view(product_name):
-    if product_name:
-        product = await Product.search_products(product_name)
-    if product:
-        return ResponseSchema[ReadProductSchema](
-            message=f"Product {product_name} was found",
-            data=product,
-        )
 
+@product_router.get("/products/", status_code=status.HTTP_200_OK, response_model=ResponseSchema[list[ProductSchema]], )
+async def get_products_view(product_name):
+    product = await Product.search_products(product_name)
+    if not product:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found"
+        )
+    return ResponseSchema[list[ProductSchema]](
+        message=f"Product {product_name} was found",
+        data=product,
+    )

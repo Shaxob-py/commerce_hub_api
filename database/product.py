@@ -52,11 +52,33 @@ class Product(CreatedModel):
 
     @classmethod
     async def search_products(cls, product_name: str, limit: int = 10, offset: int = 0):
+        if product_name:
+            query = (
+                select(cls)
+                .where(cls.name.ilike(f"%{product_name}%"))
+                .limit(limit)
+                .offset(offset)
+            )
+            result = await db.execute(query)
+            return result.scalars().all()
         query = (
             select(cls)
-            .where(cls.name.ilike(f"%{product_name}%"))
             .limit(limit)
             .offset(offset)
         )
         result = await db.execute(query)
         return result.scalars().all()
+
+
+    @classmethod
+    async def get_products_by_user_id(cls, user_id, limit: int = 10, offset: int = 0):
+        query = (
+            select(Product)
+            .where(Product.user_id == user_id)
+            .offset(offset)
+            .limit(limit)
+        )
+        result = await db.execute(query)
+        products = result.scalars().all()
+
+        return products

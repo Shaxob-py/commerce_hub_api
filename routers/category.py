@@ -40,3 +40,8 @@ async def get_categories_view():
         message='Categories',
         data=categories,
     )
+
+@category_router.post("/categories", response_model=ResponseSchema[list[ReadCategorySchema]],
+                     status_code=status.HTTP_201_CREATED)
+async def get_categories_view():
+
