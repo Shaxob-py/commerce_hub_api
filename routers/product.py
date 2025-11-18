@@ -84,7 +84,7 @@ async def get_product_view(product_id: UUID, current_user=Depends(get_current_us
     )
 
 
-@product_router.get("/products/", status_code=status.HTTP_200_OK,
+@product_router.get("/products", status_code=status.HTTP_200_OK,
                     response_model=ResponseSchema[list[ProductSchema]], )
 async def get_products_view(product_name: Optional[str] = None,
                             limit: int = 10 , offset: int = 0):

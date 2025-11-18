@@ -5,7 +5,6 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database.base import CreatedModel, db
-from schemas.product import ProductFilter
 
 
 class Product(CreatedModel):

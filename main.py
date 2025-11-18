@@ -38,8 +38,8 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 app = FastAPI(
     docs_url='/',
-    title="Commerce Hub Api",
-    description="JWT Authentication bilan himoyalangan API",
+    title="Commerce Hub API",
+    description="api/vi",
     lifespan=lifespan,
 )
 
@@ -51,12 +51,9 @@ if not os.path.exists(MEDIA_DIR):
 app.mount("/media", StaticFiles(directory=MEDIA_DIR), name="media")
 
 origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
     "http://localhost:8080",
     "http://localhost:3000",
-    "http://10.40.1.161:3000",
+    "http://192.168.1.99:3000",
     "http://10.40.1.161:8000",
     "*",
 ]

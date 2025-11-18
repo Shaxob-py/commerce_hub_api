@@ -13,6 +13,7 @@ class CategorySchema(BaseModel):
 
 
 class ProductSchema(BaseModel):
+    id : UUID
     name: str
     price: float
     location: str
@@ -75,12 +76,3 @@ class ReadCommentSchema(BaseModel):
     class Config:
         from_attributes = True
 
-class ProductFilter(BaseModel):
-    name: Optional[str] = None
-    price_min: Optional[float] = None
-    price_max: Optional[float] = None
-    limit: int = 20
-    offset: int = 0
-
-    class Config:
-        from_attributes = True
