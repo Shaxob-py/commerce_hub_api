@@ -82,24 +82,6 @@ app = FastAPI(
 
 ### 🎨 **Feature Showcase**
 
-</div>
-
-<table>
-<tr>
-<td align="center" width="25%">
-<img src="https://img.shields.io/badge/FastAPI-Backend-00D4FF?style=for-the-badge&logo=fastapi&logoColor=white&labelColor=1a1a1a"/>
-<br/><strong>High-Performance API</strong>
-<br/>Async endpoints with automatic documentation
-</td>
-<td align="center" width="25%">
-<img src="https://img.shields.io/badge/PostgreSQL-Database-4169E1?style=for-the-badge&logo=postgresql&logoColor=white&labelColor=1a1a1a"/>
-<br/><strong>Robust Data Storage</strong>
-<br/>Reliable relational database with migrations
-</td>
-<td align="center" width="25%">
-<img src="https://img.shields.io/badge/Redis-Caching-FF4438?style=for-the-badge&logo=redis&logoColor=white&labelColor=1a1a1a"/>
-<br/><strong>Lightning Cache</strong>
-<br/>In-memory caching for optimal performance
 
 
 
