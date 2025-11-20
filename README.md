@@ -243,6 +243,45 @@ POST
 </details>
 
 
+<details>
+<summary><b>Comments </b></summary>
+
+```http
+DELETE
+/api/v1/comments/{comments_id}
+GET
+/api/v1/products/{product_id}/comments
+POST
+/api/v1/products/{product_id}/comments
+```
+
+</details>
+
+<details>
+<summary><b> Support Message </b></summary>
+
+```http
+POST
+/api/v1/support
+```
+
+</details>
+
+<details>
+<summary><b> Category </b></summary>
+
+```http
+GET
+/api/v1/categories/{category_id}/products
+GET
+/api/v1/categories
+POST
+/api/v1/categories
+DELETE
+/api/v1/categories/{category_id}
+```
+
+</details>
 
 
 
