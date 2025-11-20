@@ -1,9 +1,9 @@
 <div align="center">
 
-# 🚀 FastAPI AI Travel Agent
+# 🚀 FastAPI
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=32&duration=3000&pause=1000&color=00D4FF&center=true&vCenter=true&width=700&lines=FastAPI+AI+Travel+Agent;Intelligent+Trip+Planning;Redis+%2B+PostgreSQL+Powered;Next-Gen+Travel+Assistant" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=32&duration=3000&pause=1000&color=00D4FF&center=true&vCenter=true&width=700&lines=FastAPI+Commerse+hub;Deloping+with+Shaxob-py;Redis+%2B+PostgreSQL+Powered;" alt="Typing SVG" />
 </p>
 
 <p align="center">
@@ -356,7 +356,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://travel_user:secure_password@postgres:5432/travel_db
+      - DATABASE_URL=postgresql://*:secure_password@postgres:5432/*
       - REDIS_URL=redis://redis:6379/0
     depends_on:
       postgres:
@@ -365,25 +365,25 @@ services:
         condition: service_healthy
     restart: unless-stopped
     networks:
-      - travel_network
+      - *_network
 
   🗄️ postgres:
     image: postgres:15-alpine
     environment:
-      POSTGRES_DB: travel_db
-      POSTGRES_USER: travel_user
-      POSTGRES_PASSWORD: secure_password
+      POSTGRES_DB: *
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: *
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U travel_user -d travel_db"]
+      test: ["CMD-SHELL", "pg_isready -U *_user -d *_db"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - travel_network
+      - *_network
 
   ⚡ redis:
     image: redis:7-alpine
@@ -397,14 +397,14 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - travel_network
+      - *_network
 
 volumes:
   postgres_data:
   redis_data:
 
 networks:
-  travel_network:
+  *_network:
     driver: bridge
 ```
 
