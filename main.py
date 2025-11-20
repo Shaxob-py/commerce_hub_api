@@ -20,10 +20,10 @@ from routers import router
 async def lifespan(_app: FastAPI):
     await db.create_all()
     admin.mount_to(app)
-    print('project ishga tushdi')
+    print('project is running')
     yield
     # await db.drop_all()
-    print('project toxtadi')
+    print('project is stopped')
 
 
 app = FastAPI(docs_url='/', root_path='/api', title="Commerce Hub API", lifespan=lifespan, )
