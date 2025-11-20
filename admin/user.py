@@ -7,8 +7,7 @@ from database import User
 class UserModelView(ModelView):
     fields = [
         StringField("username", label="Username", help_text="togri yoz", ),
-        StringField("email", label="Phone"),
-        IntegerField("telegram_id", label="Telegram ID"),
+        StringField("email", label="Email"),
         EnumField("role", enum=User.Role, label="Role"),
     ]
 
@@ -38,7 +37,6 @@ class AdminModelView(ModelView):
         "id",
         "username",
         "email",
-        "telegram_id",
         "role",
     ]
     label = 'Adminlar'

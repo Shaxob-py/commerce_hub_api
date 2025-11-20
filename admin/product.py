@@ -5,9 +5,8 @@ class ProductModelView(ModelView):
     fields = [
         "id",
         "name",
-        "days",
         "description",
-        "view",
+        "views",
         "user_id",
 
     ]

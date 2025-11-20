@@ -15,29 +15,29 @@ class UsernameAndPasswordProvider(AuthProvider):
             request: Request,
             response: Response,
     ) -> Response:
-        phone_number = username
-        user = await User.get_by_phone_number(phone_number)
+        email = username
+        user = await User.get_by_email(email)
 
         if not user:
-            raise LoginFailed("Invalid phone_number or password")
+            raise LoginFailed("Invalid email or password")
 
         if user.role != User.Role.ADMIN:
             raise LoginFailed("You are not allowed to access admin panel")
 
         if not user.check_password(password):
             print(password)
-            raise LoginFailed("Invalid phone_number or password")
+            raise LoginFailed("Invalid email or password")
 
-        request.session.update({"phone_number": phone_number})
+        request.session.update({"email": email})
         request.state.user = user
         return response
 
     async def is_authenticated(self, request: Request) -> bool:
-        phone_number = request.session.get("phone_number")
-        if not phone_number:
+        email = request.session.get("email")
+        if not email:
             return False
 
-        user = await User.get_by_phone_number(phone_number)
+        user = await User.get_by_email(email)
         if not user:
             return False
 
@@ -50,7 +50,7 @@ class UsernameAndPasswordProvider(AuthProvider):
 
     def get_admin_user(self, request: Request) -> AdminUser:
         user: User = request.state.user
-        return AdminUser(username=user.phone_number)
+        return AdminUser(username=user.email)
 
     async def logout(self, request: Request, response: Response) -> Response:
         request.session.clear()

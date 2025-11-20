@@ -1,6 +1,7 @@
 import os
 from contextlib import asynccontextmanager
 
+from admin import admin
 from database.base import db
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
@@ -18,6 +19,7 @@ from routers import router
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     await db.create_all()
+    admin.mount_to(app)
     print('project ishga tushdi')
     yield
     # await db.drop_all()
@@ -38,6 +40,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 app = FastAPI(
     docs_url='/',
+
     title="Commerce Hub API",
     description="api/vi",
     lifespan=lifespan,
